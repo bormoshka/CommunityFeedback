@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gui>
+    <common>
+        <title>Голосование за звание Человек Года</title>
+    </common>
+    <loginForm>
+        <header>Авторизация в системе</header>
+    </loginForm>
+    <mainPage>
+        <footer>
+            <text>
+                Разработано в свободное время, в основном ночами. Съедено сладостей: 4, выпито кружек чая: 8.
+            </text>
+        </footer>
+    </mainPage>
+</gui>
