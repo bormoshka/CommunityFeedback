@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <gui>
     <common>
-        <title>Голосование за звание Человек Года</title>
+        <title>Мнение сообщества</title>
     </common>
     <loginForm>
         <header>Авторизация в системе</header>
