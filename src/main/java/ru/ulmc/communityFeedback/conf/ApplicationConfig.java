@@ -1,8 +1,10 @@
 package ru.ulmc.communityFeedback.conf;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Configurable;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.stereotype.Component;
 import ru.ulmc.communityFeedback.conf.reference.ConfigBeanUI;
 import ru.ulmc.communityFeedback.utils.ServletContainer;
 import ru.ulmc.communityFeedback.utils.impl.ServletContainerFactory;
@@ -11,6 +13,7 @@ import javax.servlet.ServletContext;
 
 @Configuration
 public class ApplicationConfig {
+
     @Autowired
     ServletContext context;
 
@@ -33,6 +36,4 @@ public class ApplicationConfig {
         }
         return configBeanUI;
     }
-
-
 }

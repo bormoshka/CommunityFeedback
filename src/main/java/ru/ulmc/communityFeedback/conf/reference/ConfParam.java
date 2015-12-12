@@ -5,7 +5,7 @@ package ru.ulmc.communityFeedback.conf.reference;
  * User: Kolmogorov Alex
  * Date: 06.12.2015
  */
-public class ConfParam<T> extends  AbstractConfParam<T>{
+public class ConfParam<T> extends AbstractConfParam<T> {
     public final static ConfParam<String> AUTH_PROVIDER = new ConfParam<>("auth.provider", Constants.AUTH_PROVIDER_LDAP);
     public final static ConfParam<String> AUTH_LDAP_URL = new ConfParam<>("auth.ldap.url", null);
     public final static ConfParam<String> AUTH_LDAP_BASE_SEARCH_DN = new ConfParam<>("auth.ldap.baseSearchDn", null);
@@ -16,7 +16,9 @@ public class ConfParam<T> extends  AbstractConfParam<T>{
     public final static ConfParam<String> DB_URL = new ConfParam<>("db.url", "jdbc:sqlite:ru.ulmc.communityFeedback.db");
     public final static ConfParam<String> DB_USER = new ConfParam<>("db.user", null);
     public final static ConfParam<String> DB_PASSWORD = new ConfParam<>("db.password", null);
+    public final static ConfParam<String> DB_DIALECT = new ConfParam<>("db.dialect", null);
 
+    public final static ConfParam<Boolean> CREATE_DEMO_DATA = new ConfParam<>("app.createDemo", true);
     public final static ConfParam<String[]> USERS_ADMINS = new ConfParam<>("users.admins", null);
     public final static ConfParam<Boolean> USERS_CREATE_LOCAL_ADMINS = new ConfParam<>("users.create.admins", true);
 

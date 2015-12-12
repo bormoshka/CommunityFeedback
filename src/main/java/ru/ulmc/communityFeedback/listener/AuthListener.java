@@ -53,7 +53,7 @@ public class AuthListener {
                 }
             }
         }
-        dao.createNewUserIfNotExist(userDetails.getUsername()); //todo: it's only for special ldap's case
+        //dao.createNewUserIfNotExist(userDetails.getUsername()); //todo: it's only for special ldap's case
     }
 
     private void setupAdmins() {

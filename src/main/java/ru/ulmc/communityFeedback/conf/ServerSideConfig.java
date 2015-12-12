@@ -32,9 +32,16 @@ public class ServerSideConfig extends AbstractConfig {
                 props.load(configLocation);
                 config.addConfiguration(props);
             } catch (ConfigurationException e) {
-                e.printStackTrace();
-                //todo: log error? maybe make mock config at default location?
-                throw new RuntimeException(e);
+                //e.printStackTrace(); //todo: log error
+                PropertiesConfiguration props = new PropertiesConfiguration();
+                props.setListDelimiter(Constants.CONFIG_LIST_DELIMITER);
+                config.addConfiguration(props);
+                try {
+                    props.load("app_defaults.properties");
+                } catch (ConfigurationException e1) {
+                    e1.printStackTrace();
+                    throw new RuntimeException(e); // звезда рулю
+                }
             }
         }
         return config;

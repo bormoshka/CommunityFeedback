@@ -11,7 +11,7 @@ import ru.ulmc.communityFeedback.listener.ConfigInterceptor;
 
 @Configuration
 @Configurable
-@ComponentScan(basePackages="ru")
+@ComponentScan(basePackages="ru.ulmc.communityFeedback")
 @EnableWebMvc
 public class MvcConfiguration extends WebMvcConfigurerAdapter {
 

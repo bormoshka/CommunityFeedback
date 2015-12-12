@@ -1,31 +1,20 @@
 package ru.ulmc.communityFeedback.dao.impl;
 
+import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.stereotype.Component;
-import ru.ulmc.communityFeedback.dao.IVotingDAO;
+import org.springframework.stereotype.Repository;
 import ru.ulmc.communityFeedback.dao.entity.Option;
 import ru.ulmc.communityFeedback.dao.entity.Topic;
 import ru.ulmc.communityFeedback.dao.entity.User;
 
-import javax.sql.DataSource;
-import java.sql.*;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-@Component
-public class VotingDAO implements IVotingDAO {
+@Repository
+public class VotingDAO {
 
-    @Qualifier("dataSource")
-    @Autowired
-    private DataSource dataSource;
-
-    @Override
     public void initDataBase() {
-        Statement stmt = null;
-        try (Connection connection = dataSource.getConnection()) {
+       /* Statement stmt = null;
             System.out.println("connection successful!");
 
             stmt = connection.createStatement();
@@ -55,15 +44,10 @@ public class VotingDAO implements IVotingDAO {
             createNomination(0L, "Генератор идей", 1);
             createNomination(1L, "Золотые руки", 2);
             createNomination(2L, "Флагман - 2015", 3);
-            connection.close();
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        System.out.println("Tables created successfully");
+        System.out.println("Tables created successfully");*/
     }
 
-    public void createNomination(Long id, String name, int order) {
+  /*  public void createNomination(Long id, String name, int order) {
         try (Connection connection = dataSource.getConnection()) {
             try (PreparedStatement stmt = connection.prepareStatement(
                     "INSERT OR REPLACE INTO NOMINATION (ID, NAME, ORDER_VALUE) VALUES (?, ?, ?);")) {
@@ -418,4 +402,5 @@ public class VotingDAO implements IVotingDAO {
         }
         return 0L;
     }
+    */
 }

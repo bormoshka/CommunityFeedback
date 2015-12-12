@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import ru.ulmc.communityFeedback.controller.model.OptionUI;
 import ru.ulmc.communityFeedback.controller.model.TopicUI;
-import ru.ulmc.communityFeedback.dao.IVotingDAO;
 import ru.ulmc.communityFeedback.dao.entity.Option;
 import ru.ulmc.communityFeedback.dao.entity.Topic;
 import ru.ulmc.communityFeedback.dao.entity.User;
@@ -27,7 +26,7 @@ import java.util.Map;
 
 @Controller
 public class IndexController {
-
+/*
     @Qualifier("votingDAO")
     @Autowired
     private IVotingDAO votingDAO;
@@ -39,7 +38,7 @@ public class IndexController {
                                         @RequestParam("displayedName") String displayedName,
                                         ModelMap model) {
 
-        votingDAO.createCandidate(/*username*/ null, displayedName, about, topicID);
+        votingDAO.createCandidate(null, displayedName, about, topicID);
         model.put("adminMessage", "Запись создана успешно!");
 
         return new ModelAndView("index", model);
@@ -179,4 +178,5 @@ public class IndexController {
         model.put("canVote", can);
         return can;
     }
+*/
 }

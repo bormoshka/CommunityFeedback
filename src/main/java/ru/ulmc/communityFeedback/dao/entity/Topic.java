@@ -1,11 +1,22 @@
 package ru.ulmc.communityFeedback.dao.entity;
 
+import javax.persistence.*;
 import java.io.Serializable;
+import java.util.List;
+import java.util.UUID;
 
-public class Topic implements Serializable {
-    private Long id;
+@Entity
+@Table(name = "TOPIC")
+public class Topic extends BaseEntity<Long> {
+
+    @Column(name = "TOPIC_NAME")
     private String name;
+
+    @Column(name = "TOPIC_ORDER")
     private Integer order;
+
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "topic")
+    protected List<Option> options;
 
     public Topic(Long id, String name, Integer order) {
         this.id = id;
@@ -14,14 +25,6 @@ public class Topic implements Serializable {
     }
 
     public Topic() {
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public String getName() {
@@ -38,6 +41,14 @@ public class Topic implements Serializable {
 
     public void setOrder(Integer order) {
         this.order = order;
+    }
+
+    public List<Option> getOptions() {
+        return options;
+    }
+
+    public void setOptions(List<Option> options) {
+        this.options = options;
     }
 
     @Override

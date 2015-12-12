@@ -1,20 +1,24 @@
 package ru.ulmc.communityFeedback.dao.entity;
 
-public class User {
-    private Long id;
+import javax.persistence.*;
+import java.util.List;
+import java.util.UUID;
+
+@Entity
+@Table(name = "COMMUNITY_USER")
+public class User extends BaseEntity<UUID> {
+
+    @Column(name = "USERNAME")
     private String username;
+
+    @Column(name = "USER_PASSWORD")
     private String password;
-    private Boolean isFinished;
+
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinTable(name = "USER_OPINION")
+    private List<UserOpinion> opinions;
 
     public User() {
-    }
-
-    public Boolean getIsFinished() {
-        return isFinished;
-    }
-
-    public void setIsFinished(Boolean isFinished) {
-        this.isFinished = isFinished;
     }
 
     public User(String username) {
@@ -27,14 +31,6 @@ public class User {
 
     public void setUsername(String username) {
         this.username = username;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public String getPassword() {

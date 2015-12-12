@@ -11,6 +11,8 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import ru.ulmc.communityFeedback.conf.reference.ConfParam;
 import ru.ulmc.communityFeedback.conf.reference.Constants;
 
+import javax.sql.DataSource;
+
 @Configuration
 @Configurable
 @EnableWebSecurity
@@ -38,6 +40,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         @Autowired
         ServerSideConfig config;
 
+        @Autowired
+        DataSource dataSource;
+
         @Override
         public void init(AuthenticationManagerBuilder auth) throws Exception {
             String authProvider = config.getProperty(ConfParam.AUTH_PROVIDER);
@@ -50,7 +55,12 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                         .userDnPatterns(userDnPatterns)
                         .contextSource()
                         .url(ldapURL);
+            } else if (Constants.AUTH_PROVIDER_DB.equals(authProvider)) {
+                auth.jdbcAuthentication().dataSource(dataSource)
+                        .usersByUsernameQuery(
+                                "select USERNAME, USER_PASSWORD from USER where USERNAME = ?");
             }
+            //todo: else in memory?
         }
     }
 }
