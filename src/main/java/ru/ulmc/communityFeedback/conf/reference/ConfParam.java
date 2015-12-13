@@ -18,9 +18,11 @@ public class ConfParam<T> extends AbstractConfParam<T> {
     public final static ConfParam<String> DB_PASSWORD = new ConfParam<>("db.password", null);
     public final static ConfParam<String> DB_DIALECT = new ConfParam<>("db.dialect", null);
 
-    public final static ConfParam<Boolean> CREATE_DEMO_DATA = new ConfParam<>("app.createDemo", true);
-    public final static ConfParam<String[]> USERS_ADMINS = new ConfParam<>("users.admins", null);
-    public final static ConfParam<Boolean> USERS_CREATE_LOCAL_ADMINS = new ConfParam<>("users.create.admins", true);
+    public final static ConfParam<Boolean> APP_CREATE_DEMO_DATA = new ConfParam<>("app.createDemo", true);
+    public final static ConfParam<String[]> APP_USERS_ADMINS = new ConfParam<>("app.users.admins", null);
+    public final static ConfParam<Boolean> APP_USERS_CREATE_LOCAL_ADMINS = new ConfParam<>("users.create.admins", true);
+
+    public final static ConfParam<Integer> APP_TOPICS_PER_PAGE = new ConfParam<>("app.topic.onPage", 10);
 
     public ConfParam(String name, T defaultValue) {
         super(name, defaultValue);

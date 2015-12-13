@@ -49,7 +49,7 @@
                                                  class="img-circle" alt="${candidate.name}" width="120" height="120">--%>
                                     </div>
 
-                                    <p class="candidate-about">${candidate.about}</p>
+                                    <p class="candidate-about">${candidate.description}</p>
                                     <c:if test="${canVote}">
                                         <c:if test="${!candidate.isChosen}">
                                             <a class="btn btn-primary"
@@ -138,7 +138,7 @@
                             });
 
                         </script>
-                        <p class="candidate-about">${candidate.about}</p>
+                        <p class="candidate-about">${candidate.description}</p>
                         <c:if test="${canVote}">
                             <c:if test="${!candidate.isChosen}">
                                 <a class="btn btn-primary"

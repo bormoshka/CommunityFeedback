@@ -6,21 +6,21 @@ import javax.persistence.*;
 @Table(name = "TOPIC_OPTION")
 public class Option extends BaseEntity<Long> {
 
-    @Column(name = "ABOUT")
-    protected String about;
+    @Column(name = "OPTION_DESCRIPTION")
+    protected String description;
 
-    @Column(name = "DISPLAYED_NAME")
+    @Column(name = "OPTION_DISPLAYED_NAME")
     protected String displayedName;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "TOPIC_ID", nullable = false)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name = "TOPIC_ID", nullable = false, referencedColumnName = "id")
     protected Topic topic;
 
     public Option() {
     }
 
-    public Option(String displayedName, String about) {
-        this.about = about;
+    public Option(String displayedName, String description) {
+        this.description = description;
         this.displayedName = displayedName;
     }
 
@@ -32,12 +32,19 @@ public class Option extends BaseEntity<Long> {
         this.displayedName = displayedName;
     }
 
-    public String getAbout() {
-        return about;
+    public String getDescription() {
+        return description;
     }
 
-    public void setAbout(String about) {
-        this.about = about;
+    public void setDescription(String description) {
+        this.description = description;
     }
 
+    public Topic getTopic() {
+        return topic;
+    }
+
+    public void setTopic(Topic topic) {
+        this.topic = topic;
+    }
 }

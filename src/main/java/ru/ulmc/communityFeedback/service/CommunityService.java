@@ -3,6 +3,8 @@ package ru.ulmc.communityFeedback.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ru.ulmc.communityFeedback.conf.ServerSideConfig;
+import ru.ulmc.communityFeedback.conf.reference.ConfParam;
 import ru.ulmc.communityFeedback.dao.entity.Option;
 import ru.ulmc.communityFeedback.dao.entity.Topic;
 import ru.ulmc.communityFeedback.dao.impl.OptionDAO;
@@ -12,13 +14,18 @@ import ru.ulmc.communityFeedback.service.api.TopicDTO;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
 public class CommunityService {
 
     @Autowired
+    ServerSideConfig config;
+
+    @Autowired
     TopicDAO topicDAO;
+
     @Autowired
     OptionDAO optionDAO;
 
@@ -34,11 +41,17 @@ public class CommunityService {
         optionDAO.persist(entity);
     }
 
+    @Transactional(readOnly = true)
+    public List<TopicDTO> getTopics(int page) {
+        int perPage = config.getIntProperty(ConfParam.APP_TOPICS_PER_PAGE);
+        return convertTopics(topicDAO.getTopics(page * perPage, perPage));
+    }
+
     protected Topic convert(TopicDTO dto) {
         Topic topic = new Topic();
         topic.setName(dto.getName());
         topic.setOrder(dto.getOrder());
-        topic.setOptions(convertToEntities(dto.getOptions()));
+        topic.setOptions(convert(dto.getOptions(), topic));
         return topic;
     }
 
@@ -50,9 +63,13 @@ public class CommunityService {
         return dto;
     }
 
+    protected List<TopicDTO> convertTopics(List<Topic> entities) {
+        return entities.stream().map(this::convert).collect(Collectors.toList());
+    }
+
     protected Option convert(OptionDTO dto) {
         Option option = new Option();
-        option.setAbout(dto.getAbout());
+        option.setDescription(dto.getAbout());
         option.setDisplayedName(dto.getDisplayedName());
         return option;
     }
@@ -63,19 +80,20 @@ public class CommunityService {
         }
         List<OptionDTO> list = new ArrayList<>();
         for (Option option : entities) {
-            OptionDTO opt = new OptionDTO(option.getDisplayedName(), option.getAbout());
+            OptionDTO opt = new OptionDTO(option.getDisplayedName(), option.getDescription());
             list.add(opt);
         }
         return list;
     }
 
-    protected List<Option> convertToEntities(List<OptionDTO> transfer) {
+    protected List<Option> convert(List<OptionDTO> transfer, Topic parent) {
         if (transfer == null || transfer.isEmpty()) {
             return null;
         }
         List<Option> list = new ArrayList<>();
         for (OptionDTO option : transfer) {
             Option opt = new Option(option.getDisplayedName(), option.getAbout());
+            opt.setTopic(parent);
             list.add(opt);
         }
         return list;

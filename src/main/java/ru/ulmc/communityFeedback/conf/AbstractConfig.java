@@ -28,7 +28,11 @@ public abstract class AbstractConfig {
         return config.getString(param.getName(), param.getDefaultValue());
     }
 
-    public Boolean getBooleanProperty(ConfParam<Boolean> param) {
+    public Integer getIntProperty(ConfParam<Integer> param) {
+        return config.getInteger(param.getName(), param.getDefaultValue());
+    }
+
+    public Boolean getBoolProperty(ConfParam<Boolean> param) {
         return config.getBoolean(param.getName(), param.getDefaultValue());
     }
 

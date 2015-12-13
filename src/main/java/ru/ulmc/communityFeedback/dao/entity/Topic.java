@@ -1,9 +1,9 @@
 package ru.ulmc.communityFeedback.dao.entity;
 
+import ru.ulmc.communityFeedback.dao.entity.constant.ResultPublishMode;
+
 import javax.persistence.*;
-import java.io.Serializable;
 import java.util.List;
-import java.util.UUID;
 
 @Entity
 @Table(name = "TOPIC")
@@ -12,10 +12,18 @@ public class Topic extends BaseEntity<Long> {
     @Column(name = "TOPIC_NAME")
     private String name;
 
+    @Column(name = "TOPIC_DESCRIPTION")
+    @Lob
+    private String description;
+
     @Column(name = "TOPIC_ORDER")
     private Integer order;
 
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "topic")
+    @Column(name = "PUBLISH_RESULTS_MODE")
+    @Enumerated(value = EnumType.ORDINAL)
+    private ResultPublishMode resultPublishMode;
+
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "topic", cascade = CascadeType.ALL)
     protected List<Option> options;
 
     public Topic(Long id, String name, Integer order) {

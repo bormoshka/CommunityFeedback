@@ -58,11 +58,11 @@ public class AuthListener {
 
     private void setupAdmins() {
         if (createLocalAdmins == null) {
-            createLocalAdmins = config.getBooleanProperty(ConfParam.USERS_CREATE_LOCAL_ADMINS);
+            createLocalAdmins = config.getBoolProperty(ConfParam.APP_USERS_CREATE_LOCAL_ADMINS);
         }
         if (createLocalAdmins) {
             if (admins == null) {
-                admins = config.getPropertyArray(ConfParam.USERS_ADMINS);
+                admins = config.getPropertyArray(ConfParam.APP_USERS_ADMINS);
                 userDN = config.getProperty(ConfParam.AUTH_LDAP_USER_DN_PATTERNS) +
                         config.getProperty(ConfParam.AUTH_LDAP_BASE_SEARCH_DN);
             }

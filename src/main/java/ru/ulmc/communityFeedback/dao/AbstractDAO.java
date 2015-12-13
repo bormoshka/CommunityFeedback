@@ -14,7 +14,7 @@ import java.util.Map;
 @Repository
 public abstract class AbstractDAO<T extends BaseEntity<ID>, ID extends Serializable> {
     @PersistenceContext
-    EntityManager manager;
+    protected EntityManager manager;
 
     public abstract Class<T> getEntityClass();
 
@@ -43,4 +43,11 @@ public abstract class AbstractDAO<T extends BaseEntity<ID>, ID extends Serializa
         return query.getResultList();
     }
 
+    public EntityManager getManager() {
+        return manager;
+    }
+
+    public void setManager(EntityManager manager) {
+        this.manager = manager;
+    }
 }
