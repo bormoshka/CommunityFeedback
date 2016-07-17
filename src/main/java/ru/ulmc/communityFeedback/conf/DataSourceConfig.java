@@ -65,7 +65,9 @@ public class DataSourceConfig {
         props.setProperty("hibernate.c3p0.idle_test_period", "6000");
         props.setProperty("hibernate.c3p0.numHelperThreads", "8");
         props.setProperty("hibernate.show_sql", "true");
-        props.setProperty("hibernate.hbm2ddl.auto", "create");
+        if (config.getBoolProperty(ConfParam.APP_CREATE_DEMO_DATA)) {
+            props.setProperty("hibernate.hbm2ddl.auto", "create");
+        }
         props.setProperty("hibernate.cache.use_second_level_cache", "true");
         return props;
     }

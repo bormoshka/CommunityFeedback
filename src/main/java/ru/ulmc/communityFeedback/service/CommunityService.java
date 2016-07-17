@@ -5,12 +5,16 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.ulmc.communityFeedback.conf.ServerSideConfig;
 import ru.ulmc.communityFeedback.conf.reference.ConfParam;
+import ru.ulmc.communityFeedback.dao.entity.Authority;
 import ru.ulmc.communityFeedback.dao.entity.Option;
 import ru.ulmc.communityFeedback.dao.entity.Topic;
+import ru.ulmc.communityFeedback.dao.entity.User;
 import ru.ulmc.communityFeedback.dao.impl.OptionDAO;
 import ru.ulmc.communityFeedback.dao.impl.TopicDAO;
+import ru.ulmc.communityFeedback.dao.impl.UserDAO;
 import ru.ulmc.communityFeedback.service.api.OptionDTO;
 import ru.ulmc.communityFeedback.service.api.TopicDTO;
+import ru.ulmc.communityFeedback.system.bean.UserSession;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,6 +32,9 @@ public class CommunityService {
 
     @Autowired
     OptionDAO optionDAO;
+
+    @Autowired
+    UserDAO userDAO;
 
     @Transactional
     public void createTopic(TopicDTO dto) {
@@ -47,6 +54,11 @@ public class CommunityService {
         return convertTopics(topicDAO.getTopics(page * perPage, perPage));
     }
 
+    @Transactional(readOnly = true)
+    public boolean canUserVote(UserSession userSession) {
+        return userDAO.checkUsersAuthority(userSession.getUserHash(), Authority.Code.VOTER.getCode());
+    }
+
     protected Topic convert(TopicDTO dto) {
         Topic topic = new Topic();
         topic.setName(dto.getName());
@@ -57,6 +69,7 @@ public class CommunityService {
 
     protected TopicDTO convert(Topic entity) {
         TopicDTO dto = new TopicDTO();
+        dto.setId(entity.getId());
         dto.setName(entity.getName());
         dto.setOrder(entity.getOrder());
         dto.setOptions(convert(entity.getOptions()));
@@ -69,6 +82,7 @@ public class CommunityService {
 
     protected Option convert(OptionDTO dto) {
         Option option = new Option();
+        option.setId(dto.getId());
         option.setDescription(dto.getAbout());
         option.setDisplayedName(dto.getDisplayedName());
         return option;
@@ -81,6 +95,7 @@ public class CommunityService {
         List<OptionDTO> list = new ArrayList<>();
         for (Option option : entities) {
             OptionDTO opt = new OptionDTO(option.getDisplayedName(), option.getDescription());
+            opt.setId(option.getId());
             list.add(opt);
         }
         return list;

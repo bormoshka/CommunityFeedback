@@ -8,6 +8,8 @@ import org.springframework.security.config.annotation.authentication.configurers
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.crypto.password.StandardPasswordEncoder;
 import ru.ulmc.communityFeedback.conf.reference.ConfParam;
 import ru.ulmc.communityFeedback.conf.reference.Constants;
 
@@ -43,6 +45,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         @Autowired
         DataSource dataSource;
 
+        @Autowired
+        PasswordEncoder passwordEncoder;
+
         @Override
         public void init(AuthenticationManagerBuilder auth) throws Exception {
             String authProvider = config.getProperty(ConfParam.AUTH_PROVIDER);
@@ -56,9 +61,14 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                         .contextSource()
                         .url(ldapURL);
             } else if (Constants.AUTH_PROVIDER_DB.equals(authProvider)) {
-                auth.jdbcAuthentication().dataSource(dataSource)
-                        .usersByUsernameQuery(
-                                "select USERNAME, USER_PASSWORD from USER where USERNAME = ?");
+                auth.jdbcAuthentication()
+                        .dataSource(dataSource)
+                        .usersByUsernameQuery("select u.USERNAME, u.USER_PASSWORD, u.IS_ENABLED" +
+                                " from APP_USER u where u.USERNAME = ?")
+                        .authoritiesByUsernameQuery("select u.username, a.authority_name from APP_USER u " +
+                                "left join AUTHORITY_TO_USER au on au.USERS_ID = u.id " +
+                                "left join AUTHORITY a on a.id=au.AUTHORITIES_ID where u.username=?")
+                        .passwordEncoder(passwordEncoder);
             }
             //todo: else in memory?
         }

@@ -18,7 +18,6 @@ public class AppListener {
 
     @EventListener
     public void handleAuthenticationSuccessEvent(ContextRefreshedEvent event) {
-        // dao.initDataBase();
         if (config.getBoolProperty(ConfParam.APP_CREATE_DEMO_DATA)) {
             demoService.setupDemo();
         }

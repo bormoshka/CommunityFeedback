@@ -2,6 +2,7 @@ package ru.ulmc.communityFeedback.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.annotation.Scope;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -15,6 +16,10 @@ import ru.ulmc.communityFeedback.controller.model.TopicUI;
 import ru.ulmc.communityFeedback.dao.entity.Option;
 import ru.ulmc.communityFeedback.dao.entity.Topic;
 import ru.ulmc.communityFeedback.dao.entity.User;
+import ru.ulmc.communityFeedback.service.CommunityService;
+import ru.ulmc.communityFeedback.service.api.OptionDTO;
+import ru.ulmc.communityFeedback.service.api.TopicDTO;
+import ru.ulmc.communityFeedback.system.bean.UserSession;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -25,11 +30,14 @@ import java.util.Map;
 
 
 @Controller
+@Scope(scopeName = "request")
 public class IndexController {
-/*
-    @Qualifier("votingDAO")
+
     @Autowired
-    private IVotingDAO votingDAO;
+    private CommunityService communityService;
+
+    @Autowired
+    UserSession userSession;
 
     @RequestMapping(path = "/createCandidate", method = RequestMethod.POST)
     @PreAuthorize("hasRole('ROLE_VOTE_ADMIN')")
@@ -37,8 +45,8 @@ public class IndexController {
                                         @RequestParam("about") String about,
                                         @RequestParam("displayedName") String displayedName,
                                         ModelMap model) {
-
-        votingDAO.createCandidate(null, displayedName, about, topicID);
+        OptionDTO optionDTO = new OptionDTO(displayedName, about);
+        communityService.createOption(topicID, optionDTO);
         model.put("adminMessage", "Запись создана успешно!");
 
         return new ModelAndView("index", model);
@@ -47,27 +55,16 @@ public class IndexController {
     @RequestMapping(path = "/", method = RequestMethod.GET)
     @PreAuthorize("isAuthenticated()")
     public ModelAndView index(Principal principal, ModelMap model) {
-
-        Map<Long, Long> votes = votingDAO.findVotes(principal.getName());
-        Map<Topic, List<Option>> data = votingDAO.getNominationsWithCandidates();
+        List<TopicDTO> data = communityService.getTopics(0);
         if (data == null || data.isEmpty()) {
             // model.put("emptyMessage", "Кандидатов нет.");
             return new ModelAndView("index", model);
         }
-        canUserVote(principal.getName(), model);
+        canUserVote(model);
 
         List<TopicUI> dataList = new ArrayList<>();
-        for (Topic n : data.keySet()) {
+        for (TopicDTO n : data) {
             List<OptionUI> list = new ArrayList<>();
-            for (Option can : data.get(n)) {
-                OptionUI candidate = new OptionUI(can.getId(), can.getDisplayedName(), can.getAbout());
-                if (votes != null && !votes.isEmpty()) {
-                    if (votes.get(n.getId()) != null && candidate.getId().equals(votes.get(n.getId()))) {
-                        candidate.setIsChosen(true);
-                    }
-                }
-                list.add(candidate);
-            }
             TopicUI nUI = new TopicUI(n.getName(), n.getId(), list);
             dataList.add(nUI);
         }
@@ -75,6 +72,22 @@ public class IndexController {
         return new ModelAndView("index", model);
     }
 
+    @RequestMapping(value = "/logout", method = RequestMethod.GET)
+    public ModelAndView logoutPage(HttpServletRequest request, HttpServletResponse response, ModelMap model) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        if (auth != null) {
+            new SecurityContextLogoutHandler().logout(request, response, auth);
+        }
+        return new ModelAndView("redirect:/login");
+    }
+
+
+    private boolean canUserVote(ModelMap model) {
+        boolean can = communityService.canUserVote(userSession);
+        model.put("canVote", can);
+        return can;
+    }
+/*
     @RequestMapping(path = "/getResults", method = RequestMethod.GET)
     @PreAuthorize("hasRole('ROLE_VOTE_ADMIN')")
     public ModelAndView getResults(Principal principal, ModelMap model) {
